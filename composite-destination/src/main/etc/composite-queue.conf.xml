@@ -1,0 +1,16 @@
+<!--Place this under beans/broker/destinationInterceptors-->
+<virtualDestinationInterceptor xmlns="http://activemq.apache.org/schema/core"
+                               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                               xsi:schemaLocation="http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+    <virtualDestinations>
+        <compositeQueue name="demo.BroadCastingQueue" forwardOnly="false">
+            <forwardTo>
+                <queue physicalName="demo.BroadCasting.QueueA"/>
+                <queue physicalName="demo.BroadCasting.QueueB"/>
+                <filteredDestination selector="level = gold" queue="demo.BroadCasting.QueueC"/>
+                <topic physicalName="demo.BroadCasting.TopicA"/>
+            </forwardTo>
+        </compositeQueue>
+    </virtualDestinations>
+</virtualDestinationInterceptor>
+
