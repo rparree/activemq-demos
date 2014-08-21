@@ -28,7 +28,7 @@ There is an excellent blog entry explaining how to connect: [http://sensatic.net
 
 ### Connect
 
-```java
+```
 telnet
 telnet> open localhost 61613
 Trying 127.0.0.1...
@@ -49,7 +49,7 @@ In the hawtio console you should be able to see the connection (`remoteAddress` 
 
 The frame below initiates the session The `accept-version` and `host` headers are mandatory for STOMP 1.2 clients.
 
-```java
+```
 CONNECT
 accept-version:1.2
 host:localhost
@@ -90,7 +90,7 @@ Below is an example [SEND](http://stomp.github.io/stomp-specification-1.2.html#S
 makes it easier to see the successful reception of the frame. The example send command below
 also has the recommended [content-type](http://stomp.github.io/stomp-specification-1.2.html#Header_content-type) header (note the)
 
-```java
+```
 SEND
 destination:SomeQueue
 content-type:text/plain
@@ -107,7 +107,7 @@ Consult the hawtio console and observe the message has been delivered
 
 The frame below disconnects from the server
 
-```java
+```
 DISCONNECT
 receipt:789
 
@@ -130,7 +130,7 @@ The frame below subscribes to the `SomeQueue` destination. You need to pass
 the [id](http://stomp.github.io/stomp-specification-1.2.html#SUBSCRIBE_id_Header) header
 as we could have multiple open subscriptions in one session (this `id` is now indicated on each message which we receive)
 
-```java
+```
 SUBSCRIBE
 id:0
 destination:SomeQueue
@@ -151,7 +151,7 @@ Make sure you look at the hawtio console and notice how messages are dispatched 
 
 A received MESSAGE frame might look like:
 
-```java
+```
 MESSAGE
 ack:ID\chp-8570w-60528-1388615318930-10\c1
 message-id:ID\chp-8570w-60528-1388615318930-6\c1\c1\c1\c1
@@ -169,7 +169,7 @@ Notice the inclusion of the `ack` header. This header is used for the acknowledg
 
 To acknowledge all the received messages use the following frame
 
-```java
+```
 ACK
 id:ID\chp-8570w-60528-1388615318930-10\c1
 subscription:0
@@ -187,7 +187,7 @@ GO ahead an notice the changes to the queue using the hawtio console.
 
 To unsubscribe you just send a UNSUBSCRIBE frame containing the subscription value
 
-```java
+```
 UNSUBSCRIBE
 id:0
 receipt:  
