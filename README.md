@@ -50,5 +50,7 @@ Various ActiveMQ Demos
    ```
    The stop brokerOne ,and see how both client reconnect to brokerTwo. Then start brokerOne again and
    stop brokerTwo and see how it takes over again.
+- **stomp-telnet** has its own [README.md](stomp-telnet/README.md)
+- **websockets** has its own [README.md](websockets/README.md) 
    
 
