@@ -13,6 +13,9 @@ Ensure the following connector is enabled
 <transportConnector name="ws" uri="ws://0.0.0.0:61614?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
 ```
 
+Also make sure you have a http server installed. 
+Easiest is to use the [http-server](https://www.npmjs.org/package/http-server) available from npm.
+
 ## Use the demo
 
 Serve the pages off the same computer as where ActiveMQ is running. Then click the connect button. IF connection is

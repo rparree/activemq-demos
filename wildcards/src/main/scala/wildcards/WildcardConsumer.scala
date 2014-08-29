@@ -1,35 +1,34 @@
 package wildcards
 
-import javax.jms.{ConnectionFactory, TextMessage}
 import javax.naming.InitialContext
 
+import demo.Helper._
+import org.apache.activemq.ActiveMQConnectionFactory
 import org.springframework.scala.jms.core.JmsTemplate
 import resource._
-
-import scala.annotation.tailrec
 
 /**
  * todo
  */
 object WildcardConsumer extends App {
 
-  
-  for (context <- managed(new InitialContext)) {
-    val cnf = context.lookup("myJmsFactory").asInstanceOf[ConnectionFactory]
-    val template = new JmsTemplate(new org.springframework.jms.connection.SingleConnectionFactory(cnf))
 
-    val queue = template.execute(s=>s.createQueue("demo.news.*"))
-    
-    @tailrec
-    def receive() : Unit = {
-      template.receive(queue) match {
-        case Some(textMessage: TextMessage) => println(textMessage.getText)
-          receive()
-        case _ => println("No text message received")
-      }
+  for (context <- managed(new InitialContext)) {
+    val cnf = context.lookup("myJmsFactory").asInstanceOf[ActiveMQConnectionFactory]
+    for (factory <- singleConnectionFactory(cnf)) {
+      val template = new JmsTemplate(factory)
+
+      val queue = template.execute(s => s.createQueue("demo.news.*"))
+      template.javaTemplate.setReceiveTimeout(10000)
+      println("Starting to receive (timeout is 10s)")
+     
+      demo.Helper.receiveFromTemplateAndPrintText(template,queue)
+      
+      
     }
- 
-    receive()
+
+
   }
+
 
 }

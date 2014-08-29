@@ -1,12 +1,12 @@
 package failover
 
-import javax.jms.{Destination, ConnectionFactory, TextMessage}
+import javax.jms.{ConnectionFactory, Destination}
 import javax.naming.InitialContext
 
+import demo.Helper
+import demo.Helper._
 import org.springframework.scala.jms.core.JmsTemplate
 import resource._
-
-import scala.annotation.tailrec
 
 /**
  * todo
@@ -20,23 +20,13 @@ object FailOverConsumer extends App {
     val cnf = context.lookup("myJmsFactory").asInstanceOf[ConnectionFactory]
     
     
-    val factory = new org.springframework.jms.connection.SingleConnectionFactory(cnf)
     val queue = context.lookup("FailOverQueue").asInstanceOf[Destination]
-    val template = new JmsTemplate(factory)
-    
-    
+    for (factory <- singleConnectionFactory(cnf)) {
+      val template = new JmsTemplate(factory)
 
-    @tailrec
-    def receive() : Unit = {
-      template.receive(queue) match {
-        case Some(textMessage: TextMessage) => println(textMessage.getText)
-          receive()
-        case _ => println("No text message received")
-      }
+      template.javaTemplate.setReceiveTimeout(10000)
+      Helper.receiveFromTemplateAndPrintText(template,queue)
     }
-
-    receive()
-    factory.destroy()
   }
   
   

@@ -4,6 +4,7 @@ import java.util.Properties
 import javax.jms.{ConnectionFactory, Queue}
 import javax.naming.InitialContext
 
+import demo.Helper.singleConnectionFactory
 import org.springframework.scala.jms.core.JmsTemplate
 import resource._
 
@@ -20,18 +21,17 @@ object Producer extends App {
   for (context <- managed(new InitialContext)) {
     val cnf = context.lookup("myJmsFactory").asInstanceOf[ConnectionFactory]
     val queues = jndiProps.filterKeys(s => s.startsWith("queue.")).keysIterator.map(n => n.stripPrefix("queue.")).map(name => context.lookup(name).asInstanceOf[Queue])
-    val factory = new org.springframework.jms.connection.SingleConnectionFactory(cnf)
-    val template = new JmsTemplate(factory)
-
     
-    queues.foreach { q =>
-      println(s"Sent message to ${q.getQueueName}")
-      template.send(q)(session => session.createTextMessage(s"message on ${q.getQueueName}"))
-    }
+    for (factory <- singleConnectionFactory(cnf)) {
+      val template = new JmsTemplate(factory)
 
-    factory.destroy()
+      queues.foreach { q =>
+        println(s"Sent message to ${q.getQueueName}")
+        template.convertAndSend(q, s"message on ${q.getQueueName}")
+      }
+
+    }
   }
-  
-  
+
 
 }

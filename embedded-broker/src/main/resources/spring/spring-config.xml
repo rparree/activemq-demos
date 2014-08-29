@@ -1,0 +1,38 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+       http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+    <broker xmlns="http://activemq.apache.org/schema/core"
+            useJmx="false" persistent="true">
+        <transportConnectors>
+            <transportConnector uri="vm://localhost"/>
+        </transportConnectors>
+        <!--<persistenceAdapter>-->
+        <!--<jdbcPersistenceAdapter dataSource="#ds" createTablesOnStartup="true"/>-->
+        <!--</persistenceAdapter>-->
+        <persistenceFactory>
+            <journalPersistenceAdapterFactory journalLogFiles="2" journalLogFileSize="32mb" useJournal="true"
+                                              checkpointInterval="30000" useDatabaseLock="false"
+                                              dataDirectoryFile="./target/activemq/jdbc-journal"
+                                              dataSource="#ds"/>
+        </persistenceFactory>
+    </broker>
+    <connectionFactory xmlns="http://activemq.apache.org/schema/core" id="connectionFactory"
+                       brokerURL="vm://localhost"/>
+    <bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+
+    <bean id="ds"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="url"
+                  value="jdbc:mysql:///activemq?createDatabaseIfNotExist=true" />
+        <property name="username" value="root" />
+        <property name="password" value="masterkey" />
+    </bean>
+    <bean id="jmsTemplate" class="org.springframework.scala.jms.core.JmsTemplate" c:connectionFactory-ref="jmsFactory"/>
+</beans>

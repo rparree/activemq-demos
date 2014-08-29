@@ -58,3 +58,8 @@ pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
 release.properties
+
+### For this project
+
+activemq/
+
