@@ -1,6 +1,8 @@
 import com.edc4it.sbt.activemq.SbtActiveMQ
 import sbt.Keys._
 import sbt._
+import sbtassembly.Plugin.AssemblyKeys._
+import sbtassembly.Plugin._
 
 object ActiveMQDemos extends Build {
 
@@ -43,6 +45,12 @@ object ActiveMQDemos extends Build {
   def basicProject(name: String) = Project(id = name, base = file(name))
     .settings(basicSettings: _*)
     .settings(libraryDependencies ++= compile(activemq, scalaARM))
+    .settings(assemblySettings: _*)
+    .settings(mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {
+        case "META-INF/spring.factories" => MergeStrategy.concat
+        case "META-INF/spring.tooling" => MergeStrategy.concat
+        case x => old(x)
+      } })
 
 
   def basicSpringScalaProject(name: String) = basicProject(name)
