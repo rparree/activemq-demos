@@ -10,7 +10,7 @@ object ActiveMQDemos extends Build {
   lazy val parent = Project(id = "activemq-demos",
     base = file("."))
     .aggregate(jmsJNDI, requestResponse, util, failOver, compositeDestination,
-      exclusiveConsumer, wildcards, brokerNetwork, virtualTopics)
+      exclusiveConsumer, wildcards, brokerNetwork, virtualTopics, embeddedBrokers, mqtt)
     .settings(basicSettings: _*)
 
   lazy val util = basicSpringScalaProject("util")
