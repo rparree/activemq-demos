@@ -19,7 +19,7 @@ object Dependencies {
 
   def container(deps: ModuleID*): Seq[ModuleID] = deps map (_ % "container")
   val activemq = "org.apache.activemq" % "activemq-all" % activeMqVersion
-  val scalaARM = "com.jsuereth" %% "scala-arm" % "1.3"
+  val scalaARM = "com.jsuereth" %% "scala-arm" % "1.4"
   var xbean = "org.apache.xbean" % "xbean-spring" % "3.7"
   var activeIO = "org.apache.activemq" % "activeio-core" % "3.1.4"
   var mqttClient =  "org.fusesource.mqtt-client" % "mqtt-client" % "1.10"

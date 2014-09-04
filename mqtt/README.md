@@ -9,6 +9,11 @@ Make sure the mqtt connector is enabled in activemq.
 
 The mqtt protocol's specification can be downloaded from [here](http://public.dhe.ibm.com/software/dw/webservices/ws-mqtt/MQTT_V3.1_Protocol_Specific.pdf)
 
+## Running
+
+1. Run the `mqtt.JMSConsumer` using SBT
+2. Run the `mqtt.MQTTPublisher` using your IDE
+
 ## Sniffing
 
 Use the following to illustrate the data packets send between client and broker:

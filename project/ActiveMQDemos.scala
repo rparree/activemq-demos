@@ -28,19 +28,17 @@ object ActiveMQDemos extends Build {
   lazy val compositeDestination = basicSpringScalaProject("composite-destination") dependsOn util
   lazy val failOver = basicSpringScalaProject("fail-over").dependsOn(util)
     .enablePlugins(SbtActiveMQ) // brokers configured in project's build.sbt
-
   lazy val virtualTopics = basicSpringScalaProject("virtual-topics") dependsOn util
   lazy val embeddedBrokers = basicSpringScalaProject("embedded-broker")
     .settings(
       libraryDependencies ++= compile(xbean, activeIO),
       libraryDependencies ++= compile(springDB: _*)
-
     )
     .dependsOn(util)
 
-  lazy val mqtt = Project(id = "mqtt", base = file("mqtt"))
-    .settings(basicSettings: _*)
+  lazy val mqtt = basicSpringScalaProject("mqtt") 
     .settings(libraryDependencies ++= compile(mqttClient, activemq))
+    .dependsOn(util)
 
   def basicProject(name: String) = Project(id = name, base = file(name))
     .settings(basicSettings: _*)

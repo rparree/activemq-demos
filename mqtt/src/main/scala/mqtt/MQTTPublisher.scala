@@ -1,12 +1,12 @@
 package mqtt
 
-import org.fusesource.hawtbuf.{AsciiBuffer, UTF8Buffer}
+import org.fusesource.hawtbuf.UTF8Buffer
 import org.fusesource.mqtt.client.{MQTT, QoS}
 
 /**
  * todo
  */
-object Publisher extends App {
+object MQTTPublisher extends App {
 
 
   val mqtt = new MQTT()
@@ -23,7 +23,7 @@ object Publisher extends App {
 
 
   val topic = new UTF8Buffer("/topic/demo")
-  val msg = new AsciiBuffer("hello")
+  val msg = new UTF8Buffer("hello")
   //for (i <- 1 until 1000) {
     val future = connection.publish(topic, msg, QoS.AT_LEAST_ONCE, false)
  // }
