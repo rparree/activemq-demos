@@ -1,12 +1,7 @@
+
 # activemq-demos
 
-It is recommended to install hawtio in your JBoss A-MQ or Karaf installation. Look at [hawtio on fuse installation](http://hawt.io/getstarted/#Using_Fuse__Fabric8__Apache_Karaf_or_Apache_Servicemix)
-
-For connecting to a standalone activemq check this [blog](http://sensatic.net/activemq/activemq-and-hawtio.html) 
-
-Various ActiveMQ Demos
-
-## The Demos
+Please consult the setup instructions further below.
 
 - **jms-jndi** Very simple demo showing use of `jndi.properties` and `dynamicQueues`
 - **request-response** Basic Request-Response MEP implementation (uses scala-spring for JMS templates). Only one of
@@ -27,5 +22,95 @@ eiher start them in the same sbt process or in separate processes (which makes k
 - **embedded-broker** Showing embedde brokers as well as demonstrating jdbc journalled persistence. Has its own
 [README.md](embedded-broker/README.md)
 - **mqtt** Illustrates use of mqtt protocol. Has its own [README.md](mqtt/README.md) 
+
+
+# Setup 
+
+
+These demos have been developed and tested with ActiveMQ 5.10, Java 7-8 and SBT 0.13.5.
+
+## ActiveMQ
+
+You could run against the standalone version, or prepare a kara instance. The instructions for setting up
+your karaf instance are below. 
+
+### Standalone ActiveMQ with Hawtio Chrome plugin
+
+Download from [http://activemq.apache.org/download.html](http://activemq.apache.org/download.html)
+
+For connecting to hawtio to a standalone activemq check this [blog](http://sensatic.net/activemq/activemq-and-hawtio.html) 
+
+
+### ActiveMQ and Hawtio on Karaf
+
+First download and install [Karaf 3.0.x](http://karaf.apache.org/index/community/download.html). Then start karaf and
+execute the following commands:
+
+```bash
+me@my-linux:apache-karaf-3.0.1> bin/karaf 
+        __ __                  ____      
+       / //_/____ __________ _/ __/      
+      / ,<  / __ `/ ___/ __ `/ /_        
+     / /| |/ /_/ / /  / /_/ / __/        
+    /_/ |_|\__,_/_/   \__,_/_/         
+
+  Apache Karaf (3.0.1)
+
+Hit '<tab>' for a list of available commands
+and '[cmd] --help' for help on a specific command.
+Hit '<ctrl-d>' or type 'system:shutdown' or 'logout' to shutdown Karaf.
+
+karaf@root()> feature:repo-add activemq 5.10.0
+Adding feature url mvn:org.apache.activemq/activemq-karaf/5.10.0/xml/features
+karaf@root()> feature:install activemq-broker
+
+karaf@root()> feature:repo-add hawtio 1.4.14
+Adding feature url mvn:io.hawt/hawtio-karaf/1.4.14/xml/features
+karaf@root()> feature:install hawtio
+karaf@root()> 
+```
+
+
+## Build environment 
+
+You will need to install  [SBT 0.13](http://www.scala-sbt.org/download.html)
+
+Example of running a demo 
+```bash
+$ me@mylinux:activemq-demos> sbt
+Loading ...
+[info] ...
+...
+> projects
+[info]   * activemq-demos                                                                                                                                                                     
+[info]     broker-network                                                                                                                                                                     
+[info]     composite-destination                                                                                                                                                              
+[info]     embedded-broker                                                                                                                                                                    
+[info]     exclusive-consumer                                                                                                                                                                 
+[info]     fail-over                                                                                                                                                                          
+[info]     jms-jndi                                                                                                                                                                           
+[info]     mqtt                                                                                                                                                                               
+[info]     request-response                                                                                                                                                                   
+[info]     util                                                                                                                                                                               
+[info]     virtual-topics                                                                                                                                                                     
+[info]     wildcards 
+
+> project embedded-broker                                                                                                                                                                     
+[info] Set current project to embedded-broker> 
+
+> run 
+
+Multiple main classes detected, select one to run:
+
+ [1] spring.SpringDemo
+ [2] embedded.EmbeddedDemo
+
+Enter number: 1
+...
+...
+...
+```
+
+
    
 
