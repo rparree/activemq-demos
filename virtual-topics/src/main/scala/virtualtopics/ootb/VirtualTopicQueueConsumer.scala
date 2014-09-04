@@ -19,7 +19,7 @@ object VirtualTopicQueueConsumer extends App {
   for (context <- managed(new InitialContext)) {
     val cnf = context.lookup("myJmsFactory").asInstanceOf[ConnectionFactory]
     
-    val queueName = s"Consumer.$consumerName.VirtualTopic.SampleTopic"
+    val queueName = s"Consumer.$consumerName.VirtualTopic.SampleTopic" // or even Consumer.$consumerName.VirtualTopic.*
 
     for (factory <- singleConnectionFactory(cnf)) {
       val template = new JmsTemplate(factory)

@@ -17,7 +17,11 @@ object TopicPublisher extends App {
     val topic = context.lookup("SampleTopic").asInstanceOf[Topic]
     for (factory <- singleConnectionFactory(cnf)) {
       val template = new JmsTemplate(factory)
-      template.convertAndSend(topic,"hello")
+
+      println("Enter message to send (type exit to quit)")
+      for (message <- io.Source.stdin.getLines().takeWhile(_ != "exit")) {
+        template.convertAndSend(topic, message)
+      }
     }
   }
 
