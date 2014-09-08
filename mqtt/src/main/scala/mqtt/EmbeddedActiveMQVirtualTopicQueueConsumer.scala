@@ -8,7 +8,7 @@ import org.springframework.scala.jms.core.JmsTemplate
 import resource._
 
 
-object EmbeddedAactiveMQConsumer extends App {
+object EmbeddedActiveMQVirtualTopicQueueConsumer extends App {
 
   val context = new ClassPathXmlApplicationContext("spring-config.xml")
 
