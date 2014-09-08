@@ -14,7 +14,8 @@ object EmbeddedAactiveMQConsumer extends App {
 
   val template = context.getBean(classOf[JmsTemplate])
   
-  val t= template.execute(s=>s.createTopic("topic.demo.foo"))
+  //val t= template.execute(s=>s.createTopic("topic.demo.foo"))
+  val t= template.execute(s=>s.createQueue("Consumer.someconsumer.VirtualTopic.foo"))
 
 
   template.receive(t) match {

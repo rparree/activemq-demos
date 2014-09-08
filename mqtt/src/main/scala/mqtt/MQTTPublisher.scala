@@ -23,7 +23,7 @@ object MQTTPublisher extends App {
   println("got connected")
 
 
-  val topic = new UTF8Buffer("topic/demo/foo")
+  val topic = new UTF8Buffer("VirtualTopic/foo")
   val msg = new UTF8Buffer("hello")
   //for (i <- 1 until 1000) {
     val future = connection.publish(topic, msg, QoS.AT_LEAST_ONCE, false)
