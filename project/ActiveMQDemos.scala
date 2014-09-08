@@ -37,9 +37,12 @@ object ActiveMQDemos extends Build {
     .dependsOn(util)
 
   lazy val mqtt = basicSpringScalaProject("mqtt") 
-    .settings(libraryDependencies ++= compile(mqttClient, activemq))
+    .settings(libraryDependencies ++= compile(mqttClient, xbean, activemq))
+    .settings(
+      javaOptions in run += "-javaagent:../lib/jolokia-jvm-1.2.2-agent.jar=port=8777,host=localhost,user=smx,password=smx",
+      fork in run := true)
     .dependsOn(util)
-
+  
   def basicProject(name: String) = Project(id = name, base = file(name))
     .settings(basicSettings: _*)
     .settings(libraryDependencies ++= compile(activemq, scalaARM))
