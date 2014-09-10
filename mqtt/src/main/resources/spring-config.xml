@@ -9,14 +9,12 @@
         <transportConnectors>
             <transportConnector uri="vm://localhost"/>
             <transportConnector name="mqtt" uri="mqtt://0.0.0.0:1883"/>
-            <transportConnector name="openwire" uri="tcp://0.0.0.0:61616"/>
-
         </transportConnectors>
        
     </broker>
    
     <connectionFactory xmlns="http://activemq.apache.org/schema/core" id="connectionFactory"
-                       brokerURL="tcp://0.0.0.0:61616"/>
+                       brokerURL="vm://localhost"/>
    
     <bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
         <property name="connectionFactory" ref="connectionFactory"/>
