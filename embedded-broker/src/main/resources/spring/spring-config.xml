@@ -32,7 +32,7 @@
         <property name="url"
                   value="jdbc:mysql:///activemq?createDatabaseIfNotExist=true" />
         <property name="username" value="root" />
-        <property name="password" value="masterkey" />
+        <property name="password" value="" />
     </bean>
     <bean id="jmsTemplate" class="org.springframework.scala.jms.core.JmsTemplate" c:connectionFactory-ref="jmsFactory"/>
 </beans>
