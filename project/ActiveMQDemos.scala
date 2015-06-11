@@ -40,6 +40,11 @@ object ActiveMQDemos extends Build {
     .settings(libraryDependencies ++= compile(mqttClient, activemq))
     .dependsOn(util)
 
+  lazy val fabricFailOver = basicSpringScalaProject("fabric-fail-over") 
+      .settings(
+        libraryDependencies ++= compile(fabric: _*)
+    ) . dependsOn(util)
+  
   def basicProject(name: String) = Project(id = name, base = file(name))
     .settings(basicSettings: _*)
     .settings(libraryDependencies ++= compile(activemq, scalaARM))
