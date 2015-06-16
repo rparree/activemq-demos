@@ -5,8 +5,8 @@ JBossFuse:karaf@root> fabric:create --zookeeper-password masterkey --global-reso
 ```
 
 ```create the containers
-JBossFuse:karaf@root> container-create-child --jmx-user admin --jmx-password admin root East 2
-JBossFuse:karaf@root> container-create-child --jmx-user admin --jmx-password admin root West 2
+JBossFuse:karaf@root> container-create-child --jmx-user admin --jmx-password admin root east 2
+JBossFuse:karaf@root> container-create-child --jmx-user admin --jmx-password admin root west 2
 ````
 
 Optionally delete the broker on the root container
@@ -23,15 +23,15 @@ JBossFuse:karaf@root> fabric:mq-create  --group amq-east \
                  --networks-username admin --networks-password admin \
                  --ports "openwire=\${port:18000,18100}" \
                  --data /tmp/activemq/data/amq-east \
-                 --assign-container East1,East2 demo-east-profile
+                 --assign-container east1,east2 demo-east-profile
 ```
 
 Create the west-side
 ```
 JBossFuse:karaf@root> fabric:mq-create  --group amq-west \
-                 --networks amq-est \
+                 --networks amq-east \
                  --networks-username admin --networks-password admin \
                  --ports "openwire=\${port:19000,19100}" \
                  --data /tmp/activemq/data/amq-west \
-                 --assign-container West1,West2 demo-west-profile
+                 --assign-container west1,west2 demo-west-profile
 ```
