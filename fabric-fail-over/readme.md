@@ -1,13 +1,16 @@
-### Setup the fabric
+Setup the fabric
 
-```
-JBossFuse:karaf@root> fabric:create --zookeeper-password masterkey --global-resolver localip --wait-for-provisioning
+```shell
+JBossFuse:karaf@root> fabric:create --zookeeper-password masterkey \
+--global-resolver localip --wait-for-provisioning
 ```
 
-```create the containers
+create the containers
+
+```shell
 JBossFuse:karaf@root> container-create-child --jmx-user admin --jmx-password admin root east 2
 JBossFuse:karaf@root> container-create-child --jmx-user admin --jmx-password admin root west 2
-````
+```
 
 Optionally delete the broker on the root container
 
@@ -17,6 +20,7 @@ JBossFuse:karaf@root> shell:exec mv etc/org.fusesource.mq.fabric.server-default.
 ```
 
 Create the east-side
+
 ```
 JBossFuse:karaf@root> fabric:mq-create  --group amq-east \
                  --networks amq-west \
@@ -27,6 +31,7 @@ JBossFuse:karaf@root> fabric:mq-create  --group amq-east \
 ```
 
 Create the west-side
+
 ```
 JBossFuse:karaf@root> fabric:mq-create  --group amq-west \
                  --networks amq-east \
