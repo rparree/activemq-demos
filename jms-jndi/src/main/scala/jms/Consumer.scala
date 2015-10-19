@@ -23,12 +23,13 @@ object Consumer extends App {
 
 
 
-    for (connection <- managed(factory.createConnection());
+    for (connection <- managed(factory.createConnection("admin","admin"));
          session <- managed(connection.createSession(false, Session.AUTO_ACKNOWLEDGE));
          consumer <- managed(session.createConsumer(queue))) {
 
       println("Starting receiving (timeout is 30s)")
       connection.start()
+
       receiveAndPrintText(consumer, 30 seconds)
       
 

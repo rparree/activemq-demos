@@ -12,8 +12,8 @@ object BuildSettings {
     crossPaths := false,
     resolvers ++= Dependencies.resolutionRepos,
     scalacOptions ++= Seq("-target:jvm-1.7", "-deprecation"),
-    javacOptions in compile ++= Seq("-source", "1.7", "-target", "1.7"),
-    javacOptions in doc ++= Seq("-source", "1.7"),
+    javacOptions in compile ++= Seq("-source", "1.8", "-target", "1.8"),
+    javacOptions in doc ++= Seq("-source", "1.8"),
     publishTo := Some(Resolver.file("file", new File(Path.userHome.absolutePath + "/.m2/repository")))
   )
 

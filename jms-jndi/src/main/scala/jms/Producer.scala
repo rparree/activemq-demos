@@ -18,7 +18,7 @@ object Producer extends App {
     val factory = ctx.lookup("myJmsFactory").asInstanceOf[ConnectionFactory]
     val destination = ctx.lookup(destinationName).asInstanceOf[Destination]
 
-    for (connection <- managed(factory.createConnection());
+    for (connection <- managed(factory.createConnection("admin","admin"));
          session <- managed(connection.createSession(false, Session.AUTO_ACKNOWLEDGE));
          producer <- managed(session.createProducer(destination))) {
 

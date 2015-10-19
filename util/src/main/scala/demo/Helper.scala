@@ -2,7 +2,7 @@ package demo
 
 import javax.jms._
 
-import org.springframework.jms.connection.SingleConnectionFactory
+import org.springframework.jms.connection.{UserCredentialsConnectionFactoryAdapter, SingleConnectionFactory}
 import org.springframework.scala.jms.core.JmsTemplate
 import resource._
 
@@ -10,12 +10,19 @@ import scala.annotation.tailrec
 import scala.concurrent.duration._
 
 /**
- * todo
- */
+  * todo
+  */
 object Helper {
-  def singleConnectionFactory(cnf: ConnectionFactory) = makeManagedResource(new SingleConnectionFactory(cnf)) {
-    _.destroy()
-  }(Nil)
+  def singleConnectionFactory(cnf: ConnectionFactory) = {
+    val u = new UserCredentialsConnectionFactoryAdapter()
+    u.setTargetConnectionFactory(cnf)
+    u.setUsername("admin")
+    u.setPassword("admin")
+    val d = new SingleConnectionFactory(u)
+    makeManagedResource(d) {
+      _.destroy()
+    }(Nil)
+  }
 
 
   val receiveAndPrintText = receiveText(_: MessageConsumer, _: Duration)(m => println(s"received ${m.getText}"))

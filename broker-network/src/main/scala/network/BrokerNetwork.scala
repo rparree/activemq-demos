@@ -13,29 +13,30 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration._
 
-/**
- * todo
- */
+
+case class Broker(uri : String,name: String)
+
 object BrokerNetwork extends App {
 
+//  val bridge = Some(URI.create("static://(tcp://localhost:61718,tcp://localhost:61719)"))
+  val bridge = None
 
-  setupBrokerChild("tcp://localhost:61718", "broker2")
-  setupBrokerChild("tcp://localhost:61719", "broker3")
-  // setupBroker1AndSendMessage(None)
-  setupBroker1AndSendMessage(Some(URI.create("static://(tcp://localhost:61718,tcp://localhost:61719)")))
+  val broker1 = Broker("tcp://tcp://localhost:61717", "broker1")
+  val broker2 = Broker("tcp://localhost:61718", "broker2")
+  val broker3 = Broker("tcp://localhost:61718", "broker3")
 
-  def setupBrokerChild(connectorURL: String, name: String) {
-    val brokerService = new BrokerService
-    brokerService.setUseJmx(true)
+  setupBroker(broker2)
+  setupBroker(broker3)
+  setupBroker(broker1, bridge )
+  consume(broker2)
+  consume(broker3)
 
-    brokerService.addConnector(connectorURL)
 
-    brokerService.setDataDirectory(Files.createTempDirectory(name + "Data").toString)
-    brokerService.setBrokerName(name)
-    brokerService.start()
 
-    val factory = new ActiveMQConnectionFactory(connectorURL)
-    
+  produce(broker1)
+  def consume(broker : Broker): Unit ={
+    val factory = new ActiveMQConnectionFactory(broker.uri)
+
     future {
       for (connection <- managed(factory.createConnection());
            session <- managed(connection.createSession(false, Session.AUTO_ACKNOWLEDGE));
@@ -47,28 +48,33 @@ object BrokerNetwork extends App {
 
 
         demo.Helper.receiveText(consumer, 10 seconds) {
-          m => println(s"queue on $name received ${m.getText}")
+          m => println(s"queue on ${broker.name} received ${m.getText}")
         }
 
       }
-      println(s"Stopping broker $name")
-      brokerService.stop()
+      //brokerService.stop()
     }
   }
 
-
-  def setupBroker1AndSendMessage(bridge: Option[URI] = None) {
+  def setupBroker(broker : Broker, bridge: Option[URI] = None) {
     val brokerService = new BrokerService
     brokerService.setUseJmx(true)
-    brokerService.addConnector("tcp://localhost:61717")
-    brokerService.setDataDirectory(Files.createTempDirectory("broker1Data").toString)
-    brokerService.setBrokerName("broker1")
 
+    brokerService.addConnector(broker.uri)
+
+    brokerService.setDataDirectory(Files.createTempDirectory(broker.name + "Data").toString)
+    brokerService.setBrokerName(broker.name)
     bridge.map(u => brokerService.addNetworkConnector(u))
-
     brokerService.start()
 
-    val factory = new ActiveMQConnectionFactory("tcp://localhost:61717")
+
+  }
+
+
+  def produce(broker : Broker) {
+
+
+    val factory = new ActiveMQConnectionFactory(broker.uri)
     for (connection <- managed(factory.createConnection());
          session <- managed(connection.createSession(false, Session.AUTO_ACKNOWLEDGE));
          producer <- managed(session.createProducer(null))) {
@@ -81,10 +87,13 @@ object BrokerNetwork extends App {
 
     println(s"Stopping broker1 in 30s")
     Thread.sleep(30000)
-    brokerService.stop()
+    //brokerService.stop()
     println(s"Stopped broker1")
 
   }
+
+
+
 
 
 }

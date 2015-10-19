@@ -22,7 +22,7 @@ object EmbeddedDemo extends App  {
 
   val broker = startBroker
 
-  val factory = new ActiveMQConnectionFactory("vm:local?create=false")
+  val factory = for
   factory.setUseAsyncSend(true)
   for (connection <- managed(factory.createConnection())) {
     val pf = future {

@@ -12,13 +12,14 @@ import resource._
 /**
  * todo
  */
-object FailoverClient extends App {
+object FailoverProducer extends App {
 
   
-  System.setProperty("java.naming.provider.url", "discovery:(fabric:amq-east)?reconnectDelay=1000")
-  System.setProperty("zookeeper.password", "masterkey")
+//  System.setProperty("java.naming.provider.url", "discovery:(fabric:amq-east)?reconnectDelay=1000")
+//  System.setProperty("zookeeper.password", "masterkey")
 
-
+//  System.setProperty("zookeeper.url", "localhost:33337")
+  System.setProperty("java.naming.provider.url", "failover:(tcp://localhost:18000,tcp://localhost:18001)")
   
   
   for (context <- managed(new InitialContext)) {

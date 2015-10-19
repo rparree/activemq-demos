@@ -1,8 +1,9 @@
-import com.edc4it.sbt.activemq.SbtActiveMQ
+//import com.edc4it.sbt.activemq.SbtActiveMQ
 import sbt.Keys._
 import sbt._
 import sbtassembly.Plugin.AssemblyKeys._
 import sbtassembly.Plugin._
+import sbtprotobuf.{ProtobufPlugin=>PB}
 
 object ActiveMQDemos extends Build {
 
@@ -27,7 +28,7 @@ object ActiveMQDemos extends Build {
   lazy val exclusiveConsumer = basicSpringScalaProject("exclusive-consumer") dependsOn util
   lazy val compositeDestination = basicSpringScalaProject("composite-destination") dependsOn util
   lazy val failOver = basicSpringScalaProject("fail-over").dependsOn(util)
-    .enablePlugins(SbtActiveMQ) // brokers configured in project's build.sbt
+//    .enablePlugins(SbtActiveMQ) // brokers configured in project's build.sbt
   lazy val virtualTopics = basicSpringScalaProject("virtual-topics") dependsOn util
   lazy val embeddedBrokers = basicSpringScalaProject("embedded-broker")
     .settings(
@@ -35,6 +36,11 @@ object ActiveMQDemos extends Build {
       libraryDependencies ++= compile(springDB: _*)
     )
     .dependsOn(util)
+
+  lazy val protobuf = basicProject("protobuf")
+     .settings(
+       PB.protobufSettings: _*
+     )
 
   lazy val mqtt = basicSpringScalaProject("mqtt") 
     .settings(libraryDependencies ++= compile(mqttClient, activemq))
