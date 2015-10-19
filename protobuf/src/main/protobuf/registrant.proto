@@ -1,0 +1,18 @@
+package demo;
+
+option java_outer_classname="RegistrantProtos";
+
+message Registrant {
+    
+    required string username = 1;
+    required string email = 2;
+    required GenderType gender =3;
+    
+    enum GenderType {
+        FEMALE = 0;
+        MALE = 1; 
+    }
+    
+    
+    
+}
