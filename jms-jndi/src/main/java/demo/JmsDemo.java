@@ -18,8 +18,10 @@ public class JmsDemo {
         InitialContext context = new InitialContext(); //looks for jndi.properties
         ConnectionFactory cnf = (ConnectionFactory) context.lookup("myJmsFactory");
         Destination destination = (Destination) context.lookup("queue/JMSDemoQueue");
+
         Connection connection = cnf.createConnection("admin", "admin");
         Session session = connection.createSession(false, Session.DUPS_OK_ACKNOWLEDGE);
+
         MessageProducer producer = session.createProducer(destination);
         Message msg = session.createTextMessage("hello some text from legacy Java");
         producer.send(msg);

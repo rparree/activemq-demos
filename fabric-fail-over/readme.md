@@ -1,4 +1,4 @@
-### Setup the fabric
+fa### Setup the fabric
 
 Start fuse in docker:
 
@@ -7,8 +7,8 @@ docker run -Pd  \
        -p 2181:2181 \
        -p 8181:8181 \
        -p 8101:8101 \
-       -p 18000-18100:18000-18100 \
-       -p 19000-19100:19000-19100 \
+       -p 18000-18005:18000-18005 \
+       -p 19000-19005:19000-19005 \
        --name mq-fabric \
         rparree/jboss-fuse-full-admin
 ```

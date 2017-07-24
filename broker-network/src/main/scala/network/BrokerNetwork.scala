@@ -14,64 +14,48 @@ import scala.concurrent._
 import scala.concurrent.duration._
 
 
-case class Broker(uri : String,name: String)
+case class BrokerInfo(uri : String, name: String)
 
 object BrokerNetwork extends App {
 
-//  val bridge = Some(URI.create("static://(tcp://localhost:61718,tcp://localhost:61719)"))
-  val bridge = None
 
-  val broker1 = Broker("tcp://tcp://localhost:61717", "broker1")
-  val broker2 = Broker("tcp://localhost:61718", "broker2")
-  val broker3 = Broker("tcp://localhost:61718", "broker3")
+  val brokerInfo1 = BrokerInfo("tcp://localhost:61717", "broker1")
+  val brokerInfo2 = BrokerInfo("tcp://localhost:61718", "broker2")
+  val brokerInfo3 = BrokerInfo("tcp://localhost:61719", "broker3")
 
-  setupBroker(broker2)
-  setupBroker(broker3)
-  setupBroker(broker1, bridge )
-  consume(broker2)
-  consume(broker3)
+  setupBroker(brokerInfo2)
+  setupBroker(brokerInfo3)
 
+  val bridge = Some(URI.create(s"static://(${brokerInfo2.uri},${brokerInfo3.uri})"))
 
+  setupBroker(brokerInfo1, bridge)
 
-  produce(broker1)
-  def consume(broker : Broker): Unit ={
-    val factory = new ActiveMQConnectionFactory(broker.uri)
+  consume(brokerInfo2)
+  consume(brokerInfo3)
 
-    future {
-      for (connection <- managed(factory.createConnection());
-           session <- managed(connection.createSession(false, Session.AUTO_ACKNOWLEDGE));
-           consumer <- managed(session.createConsumer(session.createQueue("demoQueue")))) {
+  produce(brokerInfo1)
 
-
-        println(s"name is listening (10 sec time/out)")
-        connection.start()
-
-
-        demo.Helper.receiveText(consumer, 10 seconds) {
-          m => println(s"queue on ${broker.name} received ${m.getText}")
-        }
-
-      }
-      //brokerService.stop()
-    }
-  }
-
-  def setupBroker(broker : Broker, bridge: Option[URI] = None) {
+  def setupBroker(brokerInfo : BrokerInfo, bridge: Option[URI] = None) {
     val brokerService = new BrokerService
     brokerService.setUseJmx(true)
 
-    brokerService.addConnector(broker.uri)
+    brokerService.addConnector(brokerInfo.uri)
 
-    brokerService.setDataDirectory(Files.createTempDirectory(broker.name + "Data").toString)
-    brokerService.setBrokerName(broker.name)
-    bridge.map(u => brokerService.addNetworkConnector(u))
+    brokerService.setDataDirectory(Files.createTempDirectory(brokerInfo.name + "Data").toString)
+    brokerService.setBrokerName(brokerInfo.name)
+   // bridge.map(u => brokerService.addNetworkConnector(u))
+    bridge match {
+      case Some(uri) =>brokerService.addNetworkConnector(uri)
+      case None => println("setting up no bridge")
+    }
+
     brokerService.start()
 
 
   }
 
 
-  def produce(broker : Broker) {
+  def produce(broker : BrokerInfo) {
 
 
     val factory = new ActiveMQConnectionFactory(broker.uri)
@@ -92,6 +76,27 @@ object BrokerNetwork extends App {
 
   }
 
+  def consume(broker : BrokerInfo): Unit ={
+    val factory = new ActiveMQConnectionFactory(broker.uri)
+
+    future {
+      for (connection <- managed(factory.createConnection());
+           session <- managed(connection.createSession(false, Session.AUTO_ACKNOWLEDGE));
+           consumer <- managed(session.createConsumer(session.createQueue("demoQueue")))) {
+
+
+        println(s"${broker.name} is listening (10 sec time/out)")
+        connection.start()
+
+
+        demo.Helper.receiveText(consumer, 10 seconds) {
+          m => println(s"queue on ${broker.name} received ${m.getText}")
+        }
+
+      }
+      //brokerService.stop()
+    }
+  }
 
 
 

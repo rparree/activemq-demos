@@ -15,7 +15,8 @@ import resource._
 object FailOverConsumer extends App {
 
 //  System.setProperty("java.naming.provider.url", "discovery:(fabric:amq-west)")
-  System.setProperty("java.naming.provider.url", "failover:(tcp://localhost:19000,tcp://localhost:19001)")
+  System.setProperty("java.naming.provider.url",
+    "failover:(tcp://localhost:19000,tcp://localhost:19001)")
 //  System.setProperty("zookeeper.password", "masterkey")
 
 

@@ -24,7 +24,7 @@ object FailOverConsumer extends App {
     for (factory <- singleConnectionFactory(cnf)) {
       val template = new JmsTemplate(factory)
 
-      template.javaTemplate.setReceiveTimeout(10000)
+      template.javaTemplate.setReceiveTimeout(1000000)
       Helper.receiveFromTemplateAndPrintText(template,queue)
     }
   }

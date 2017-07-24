@@ -5,6 +5,7 @@ import javax.naming.InitialContext
 
 import demo.Helper
 import demo.Helper._
+import org.apache.activemq.ActiveMQConnectionFactory
 import org.springframework.scala.jms.core.JmsTemplate
 import resource._
 

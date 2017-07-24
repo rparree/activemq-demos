@@ -18,8 +18,10 @@ object FailoverClient extends App {
     for (factory <- singleConnectionFactory(cnf)) {
       val template = new JmsTemplate(factory)
 
-      for (i <- 1 until 1000)
+      for (i <- 1 until 100000)
         template.convertAndSend(queue, s"message $i")
+
+        Thread.sleep(200)
 
     }
 
